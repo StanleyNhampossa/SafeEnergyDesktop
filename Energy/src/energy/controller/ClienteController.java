@@ -1,6 +1,7 @@
 package energy.controller;
 
 
+import energy.dao.ClienteDAO;
 import energy.dao.ExceptionDAO;
 import energy.model.Cliente;
 import energy.model.Contador;
@@ -34,6 +35,11 @@ public class ClienteController {
 
 
             //Ele chama o método responsável por cadastar contador
+
+            ClienteDAO clienteDAO = new ClienteDAO();
+
+            cliente = clienteDAO.encontrarClientePorEmail(cliente.getEmail());
+
             ContadorController contadorController = new ContadorController();
 
             contadorController.cadastarContador(cliente, numeroDeContador);
