@@ -1,5 +1,6 @@
 package energy.controller;
 
+import energy.dao.ExceptionDAO;
 import energy.model.Cliente;
 import energy.model.Contador;
 
@@ -15,7 +16,7 @@ public class ContadorController {
         return false;
     }
 
-    public boolean cadastarContador(Cliente proprietario, int numeroDeContador){
+    public boolean cadastarContador(Cliente proprietario, int numeroDeContador) throws ExceptionDAO {
         if(proprietario != null && String.valueOf(numeroDeContador).length() > 0){
 
             Contador contador = new Contador(proprietario, numeroDeContador);

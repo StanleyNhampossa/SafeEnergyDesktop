@@ -1,5 +1,8 @@
 package energy.model;
 
+import energy.dao.ContadorDAO;
+import energy.dao.ExceptionDAO;
+
 import java.util.ArrayList;
 
 public class Contador extends Equipamentos{
@@ -63,7 +66,7 @@ public class Contador extends Equipamentos{
         this.proprietario = proprietario;
     }
 
-    public void cadastrarContador(Contador contador){
-
+    public void cadastrarContador(Contador contador) throws ExceptionDAO {
+        new ContadorDAO().cadastrarContador(contador);
     }
 }
