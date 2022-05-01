@@ -14,7 +14,6 @@ import java.util.List;
 
 public class TelaCadastrarFuncionario extends JFrame implements ActionListener{
 
-
         private JLabel lblNome = new JLabel("Nome (e outros)");
         private JTextField txtNome = new JTextField();
 
