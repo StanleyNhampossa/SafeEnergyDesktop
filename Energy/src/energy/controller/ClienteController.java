@@ -3,6 +3,7 @@ package energy.controller;
 
 import energy.dao.ClienteDAO;
 import energy.dao.ExceptionDAO;
+import energy.escritadocx.NovoCliente;
 import energy.model.Cliente;
 import energy.model.Contador;
 
@@ -30,7 +31,7 @@ public class ClienteController {
 
             Cliente cliente = new Cliente(nome, apelido, data, estadoCivil, profissao, morada, email, numeroDeBI, contacto, contactoAlternativo, nuit, genero, contadores);
 
-            cliente.setPalavraPasse(nome + apelido);
+            cliente.setPalavraPasse(apelido + nuit);
             cliente.cadastarCliente(cliente);
 
 
@@ -39,6 +40,10 @@ public class ClienteController {
             ClienteDAO clienteDAO = new ClienteDAO();
 
             cliente = clienteDAO.encontrarClientePorEmail(cliente.getEmail());
+
+            //NovoCliente novoCliente = new NovoCliente();
+
+            //novoCliente.registarCredenciaisCliente(cliente);
 
             ContadorController contadorController = new ContadorController();
 
