@@ -51,8 +51,10 @@ public class Cliente extends Pessoa {
     }
 
     public void cadastarCliente(Cliente cliente) throws ExceptionDAO {
-
         new ClienteDAO().cadastrarCliente(cliente);
+    }
 
+    public ArrayList<Cliente> listarTodosOsClientes() throws ExceptionDAO{
+        return new ClienteDAO().listarTodosClientes();
     }
 }

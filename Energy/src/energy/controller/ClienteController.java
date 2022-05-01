@@ -56,6 +56,12 @@ public class ClienteController {
         return false;
     }
 
+    public ArrayList<Cliente> listarClientes() throws ExceptionDAO{
+
+        return new Cliente().listarTodosOsClientes();
+
+    }
+
     public boolean validarSexo(String sexo){
         if(sexo == "M" || sexo == "F"){
             return true;

@@ -65,7 +65,46 @@ public class ClienteDAO {
 
     public ArrayList<Cliente> listarTodosClientes() throws ExceptionDAO{
 
-        ArrayList<Cliente> clientes = new ArrayList<>();
+        String querySQL = "select * from cliente";
+
+        Connection conexao = null;
+        PreparedStatement preparedStatement = null;
+        ArrayList<Cliente> clientes = null;
+
+        try {
+            conexao = new ConnectionMVC().getConnection();
+            preparedStatement = conexao.prepareStatement(querySQL);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet != null){
+                clientes = new ArrayList<>();
+
+                while (resultSet.next()){
+                    Cliente cliente = new Cliente();
+
+                    cliente.setCodigoDeCliente(resultSet.getInt(1));
+                    cliente.setNome(resultSet.getString(2));
+                    cliente.setApelido(resultSet.getString(3));
+                    cliente.setPalavraPasse(resultSet.getString(4));
+                    cliente.setDataDeNascimento(resultSet.getDate(5));
+                    cliente.setEstadoCivil(resultSet.getString(6));
+                    cliente.setProfissao(resultSet.getString(7));
+                    cliente.setMorada(resultSet.getString(8));
+                    cliente.setEmail(resultSet.getString(9));
+                    cliente.setNumeroDeBI(resultSet.getString(10));
+                    cliente.setContacto(resultSet.getInt(11));
+                    cliente.setContactoAlternativo(resultSet.getInt(12));
+                    cliente.setNuit(resultSet.getInt(13));
+                    cliente.setGenero(resultSet.getString(14));
+
+                    clientes.add(cliente);
+                }
+            }
+
+        }catch (SQLException e){
+
+        }
 
         return clientes;
     }
