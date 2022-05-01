@@ -1,5 +1,10 @@
 package energy.view;
 
+import energy.controller.FuncionarioController;
+import energy.dao.ExceptionDAO;
+import energy.model.Funcionario;
+import energy.model.Usuario;
+
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
@@ -7,6 +12,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static javax.swing.JOptionPane.WARNING_MESSAGE;
 
@@ -145,29 +152,68 @@ public class TelaLogin extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == btnEntrar) {
-            if ((txtId.getText().equals("123")) && (txtSenha.getPassword().equals("321"))) {
+            validacaoDeLogin(txtId.getText(), txtSenha.getText());
+        }
+
+  
+    }
+
+    private Usuario castingUsuario(Funcionario funcionario){
+        Usuario usuario = null;
+        if(funcionario != null) {
+            usuario = new Usuario();
+            usuario.setNome(funcionario.getNome());
+            usuario.setNome(funcionario.getApelido());
+            usuario.setCategoria(funcionario.getCategoria());
+            usuario.setNumeroDeFuncionario(funcionario.getNumeroDeFuncionario());
+            usuario.setLocalDeTrabalho(funcionario.getLocalDeTrabalho());
+            funcionario.setEquipaDeTrabalho(funcionario.getEquipaDeTrabalho());
+            usuario.setPalavraPasse(funcionario.getPalavraPasse());
+            usuario.setDataDeNascimento(funcionario.getDataDeNascimento());
+            usuario.setEstadoCivil(funcionario.getEstadoCivil());
+            usuario.setProfissao(funcionario.getProfissao());
+            usuario.setMorada(funcionario.getMorada());
+            usuario.setEmail(funcionario.getEmail());
+            usuario.setNumeroDeBI(funcionario.getNumeroDeBI());
+            usuario.setContacto(funcionario.getContacto());
+            usuario.setContactoAlternativo(funcionario.getContactoAlternativo());
+            usuario.setNuit(funcionario.getNuit());
+            usuario.setGenero(funcionario.getGenero());
+        }
+
+        return usuario;
+    }
+
+    private void validacaoDeLogin(String email, String senha){
+
+        FuncionarioController funcionarioController = new FuncionarioController();
+        try {
+            Funcionario funcionario = funcionarioController.encontrarFuncionario(email);
+
+            Usuario usuario = castingUsuario(funcionario);
+
+            if(usuario == null){
+                JOptionPane.showMessageDialog(this, "Preencha devidamente os campos.", "Notificação", WARNING_MESSAGE);
+            }else
+            if (email.equals(usuario.getEmail()) && senha.equals(usuario.getPalavraPasse())) {
                 dispose();
-                new TelaDeFuncionarios().gui();
-            } else if (txtId.getText().equals("")) {
-                dispose();
-                JOptionPane.showMessageDialog(this, "Preencha os campos.", "Notificação",WARNING_MESSAGE);
-                dispose();
-                new TelaLogin().gui();
-            } else if (txtSenha.getPassword().equals("")) {
-                dispose();
-                JOptionPane.showMessageDialog(this, "Preencha os campos.", "Notificação",WARNING_MESSAGE);
-                dispose();
-                new TelaLogin().gui();
-            } else {
+                if(usuario.getCategoria().equals("Administrador"))
+                    new TelaAdministracao().gui();
+                else
+                    new TelaDeFuncionarios().gui();
+            }
+
+            else {
                 dispose();
                 JOptionPane.showMessageDialog(this, "ID do Usuario ou Senha incorrecta.", "Notificação", WARNING_MESSAGE);
                 dispose();
                 new TelaLogin().gui();
             }
 
+        } catch (ExceptionDAO ex) {
+            Logger.getLogger(TelaLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-  
     }
 
     public static void main(String[] args) {
