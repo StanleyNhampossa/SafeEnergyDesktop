@@ -1,5 +1,8 @@
 package energy.model;
 
+import energy.dao.ASCDAO;
+import energy.dao.ExceptionDAO;
+
 import java.util.ArrayList;
 
 public class AreaDeServicoAoCliente {
@@ -8,6 +11,14 @@ public class AreaDeServicoAoCliente {
     private String provincia;
     private String cidade_Municipio;
     private String areaDeServico;
+
+    public AreaDeServicoAoCliente(String areaDeServico, String provincia, String cidade_Municipio) {
+        this.provincia = provincia;
+        this.cidade_Municipio = cidade_Municipio;
+        this.areaDeServico = areaDeServico;
+    }
+
+    public AreaDeServicoAoCliente(){}
 
     public ArrayList<Funcionario> getFuncionarios() {
         return funcionarios;
@@ -50,4 +61,20 @@ public class AreaDeServicoAoCliente {
     public void setAreaDeServico(String areaDeServico) {
         this.areaDeServico = areaDeServico;
     }
+
+    @Override
+    public String toString(){
+        return this.areaDeServico;
+    }
+
+    public void cadastarASC(AreaDeServicoAoCliente areaDeServicoAoCliente) throws ExceptionDAO {
+        new ASCDAO().cadastrarASC(areaDeServicoAoCliente);
+    }
+
+    public ArrayList<AreaDeServicoAoCliente> listrarASC() throws ExceptionDAO{
+        return new ASCDAO().listarTodasASC();
+    }
+
+
+
 }
