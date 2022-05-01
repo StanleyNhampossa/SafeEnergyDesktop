@@ -266,7 +266,7 @@ public class TelaDeFuncionarios extends JFrame implements ActionListener {
 
         if (e.getSource() == btnCadastroDeCliente) {
             dispose();
-            new TelaCadastarCliente().Tela();
+            new TelaCadastrarCliente().Tela();
 
         }
 
