@@ -46,6 +46,7 @@ public class ClienteDAO {
                 throw new ExceptionDAO("Erro ao fechar o Statement" + e);
             }
 
+
             try {
                 if(conexao != null)
                     conexao.close();
@@ -155,16 +156,29 @@ public class ClienteDAO {
 
             }
 
-            conexao.close();
-            preparedStatement.close();
-
-
-
 
         }catch (SQLException e){
             throw new ExceptionDAO("Erro ao consultar cliente " + e);
 
+        }finally {
+            try {
+                if(conexao != null)
+                    conexao.close();
+
+            }catch (SQLException e){
+                throw new ExceptionDAO("Erro ao fechar a conexão " + e);
+            }
+
+            try {
+                if(preparedStatement != null)
+                    preparedStatement.close();
+
+            }catch (SQLException e){
+                throw new ExceptionDAO("Erro ao fechar o statement " + e);
+            }
         }
+
+
 
         return cliente;
 

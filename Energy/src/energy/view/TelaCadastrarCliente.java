@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 import java.text.ParseException;
 import javax.swing.text.MaskFormatter;
 
-public class TelaCadastarCliente extends JFrame implements ActionListener {
+public class TelaCadastrarCliente extends JFrame implements ActionListener {
 
     JLabel lblCodigoDoCliente = new JLabel("Código do Cliente");
     JTextField txtCodigoDoCliente = new JTextField();
@@ -38,7 +38,6 @@ public class TelaCadastarCliente extends JFrame implements ActionListener {
 
     JLabel lblDataDeNascimento = new JLabel("Data de Nascimento");
     MaskFormatter MascaraData = null;
-    //JTextField txtDataDeNascimento = new JTextField();
 
     JLabel lblProfissao = new JLabel("Profissão");
     JTextField txtProfissao = new JTextField();
@@ -51,6 +50,7 @@ public class TelaCadastarCliente extends JFrame implements ActionListener {
 
     JButton btnSalvar = new JButton("SALVAR");
     JButton btnCancelar = new JButton("CANCELAR");
+    JButton btnVoltar = new JButton("VOLTAR");
 
     JLabel lblSexo = new JLabel("Sexo");
     JRadioButton rbSexoMasculino = new JRadioButton("Masculino");
@@ -75,7 +75,7 @@ public class TelaCadastarCliente extends JFrame implements ActionListener {
     JLabel lblBarraDeCadastro = new JLabel(" Cadastro ");
     JFormattedTextField jFormattedTextData;
 
-    public TelaCadastarCliente() {
+    public TelaCadastrarCliente() {
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -142,8 +142,9 @@ public class TelaCadastarCliente extends JFrame implements ActionListener {
         lblContactoAlternativo.setBounds(340, 430, 120, 25);
         txtContactoAlternativo.setBounds(475, 430, 120, 25);
 
-        btnSalvar.setBounds(700, 540, 100, 24);
-        btnCancelar.setBounds(820, 540, 100, 25);
+        btnSalvar.setBounds(580, 540, 100, 24);
+        btnCancelar.setBounds(700, 540, 100, 24);
+        btnVoltar.setBounds(820, 540, 100, 25);
 
         lblMudarFundo.setBounds(20, 485, 100, 30);
         btnMudarCorBranco.setBounds(150, 485, 30, 30);
@@ -151,7 +152,7 @@ public class TelaCadastarCliente extends JFrame implements ActionListener {
         btnMudarCorLaranja.setBackground(new Color(255, 90, 0));
         btnMudarCorBranco.setBackground(Color.white);
 
-        //add(lblCodigoDoCliente);
+
         add(lblNome);
         add(lblApelido);
         add(lblMorada);
@@ -166,7 +167,7 @@ public class TelaCadastarCliente extends JFrame implements ActionListener {
         add(lblContactoAlternativo);
         add(lblMudarFundo);
         add(lblBarraDeCadastro);
-//add(txtCodigoDoCliente);
+
         add(lblBarraLateralEsquerdo);
         add(txtNome);
         add(txtApelido);
@@ -176,12 +177,13 @@ public class TelaCadastarCliente extends JFrame implements ActionListener {
         add(txtNoBI);
         add(txtNumeroDeContador);
         add(lblDataDeNascimento);
-        // add(txtDataDeNascimento);
+
         add(lblProfissao);
         add(txtProfissao);
 
         add(btnSalvar);
         add(btnCancelar);
+        add(btnVoltar);
 
         add(lblSexo);
         add(rbSexoFeminino);
@@ -284,7 +286,7 @@ public class TelaCadastarCliente extends JFrame implements ActionListener {
 
     public static void main(String[] args) {
 
-        new TelaCadastarCliente().Tela();
+        new TelaCadastrarCliente().Tela();
 
     }
 
