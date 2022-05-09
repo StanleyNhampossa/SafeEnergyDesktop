@@ -26,6 +26,11 @@ public class Cliente extends Pessoa {
 
     }
 
+    public Cliente(String nome, String apelido, Date dataDeNascimento, String estadoCivil, String profissao, String morada, String email, String numeroDeBI, int contacto, int contactoAlternativo, int nuit, String genero) {
+        super(nome, apelido, dataDeNascimento, estadoCivil, profissao, morada, email, numeroDeBI, contacto, nuit, genero);
+        this.contactoAlternativo = contactoAlternativo;
+    }
+
     public int getCodigoDeCliente() {
         return codigoDeCliente;
     }
@@ -56,5 +61,13 @@ public class Cliente extends Pessoa {
 
     public ArrayList<Cliente> listarTodosOsClientes() throws ExceptionDAO{
         return new ClienteDAO().listarTodosClientes();
+    }
+
+    public ArrayList<Cliente> listarTodosOsClientesPorNome(String nome) throws ExceptionDAO{
+        return new ClienteDAO().listarClientePorNome(nome);
+    }
+
+    public void alterarCliente(Cliente cliente) throws ExceptionDAO{
+        new ClienteDAO().alterarCliente(cliente);
     }
 }

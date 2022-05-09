@@ -57,9 +57,34 @@ public class ClienteController {
     }
 
     public ArrayList<Cliente> listarClientes() throws ExceptionDAO{
-
         return new Cliente().listarTodosOsClientes();
+    }
 
+    public ArrayList<Cliente> listarClientesPorNome(String nome) throws ExceptionDAO{
+        return new Cliente().listarTodosOsClientesPorNome(nome);
+    }
+
+    public boolean alterarCliente(int codigoDoCliente, String nome, String apelido, String dataDeNascimento, String estadoCivil, String profissao, String morada, String email,
+                                   String numeroDeBI, int contacto, int contactoAlternativo, int nuit, String genero, int numeroDeContador) throws ParseException, ExceptionDAO {
+
+        if( (nome != null && nome.length() > 0) && (apelido != null && apelido.length() > 0) && dataDeNascimento.length() > 0 && validarDataDeNascimento(dataDeNascimento) && (estadoCivil != null && estadoCivil.length() > 0) &&
+                (profissao != null & profissao.length() > 0) && (morada != null && morada.length() > 0) && (email.length() > 0 && validarEmail(email)) && (numeroDeBI.length() > 0 && validarNoBI(numeroDeBI))
+                &&  (String.valueOf(contacto).length() > 0 && validarContacto(contacto)) && String.valueOf(contactoAlternativo).length() > 0 && validarContacto(contactoAlternativo) && String.valueOf(nuit).length() > 0 && validarNUIT(nuit) && validarSexo(genero)) {
+
+            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+
+            Date data = formato.parse(dataDeNascimento);
+
+
+            Cliente cliente = new Cliente(nome, apelido, data, estadoCivil, profissao, morada, email, numeroDeBI, contacto, contactoAlternativo, nuit, genero);
+            cliente.setCodigoDeCliente(codigoDoCliente);
+            cliente.alterarCliente(cliente);
+
+
+            return true;
+
+        }
+        return false;
     }
 
     public boolean validarSexo(String sexo){

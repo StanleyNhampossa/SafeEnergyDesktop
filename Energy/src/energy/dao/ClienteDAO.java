@@ -58,8 +58,6 @@ public class ClienteDAO {
 
         }
 
-
-
     }
 
 
@@ -138,9 +136,20 @@ public class ClienteDAO {
                 while (resultSet.next()){
 
                     Cliente cliente = new Cliente();
-                    cliente.setCodigoDeCliente(resultSet.getInt("codigoDoCliente"));
-                    cliente.setNome(resultSet.getString("nome"));
-                    cliente.setApelido(resultSet.getString("apelido"));
+                    cliente.setCodigoDeCliente(resultSet.getInt(1));
+                    cliente.setNome(resultSet.getString(2));
+                    cliente.setApelido(resultSet.getString(3));
+                    cliente.setPalavraPasse(resultSet.getString(4));
+                    cliente.setDataDeNascimento(resultSet.getDate(5));
+                    cliente.setEstadoCivil(resultSet.getString(6));
+                    cliente.setProfissao(resultSet.getString(7));
+                    cliente.setMorada(resultSet.getString(8));
+                    cliente.setEmail(resultSet.getString(9));
+                    cliente.setNumeroDeBI(resultSet.getString(10));
+                    cliente.setContacto(resultSet.getInt(11));
+                    cliente.setContactoAlternativo(resultSet.getInt(12));
+                    cliente.setNuit(resultSet.getInt(13));
+                    cliente.setGenero(resultSet.getString(14));
 
 
                     clientes.add(cliente);
@@ -221,6 +230,53 @@ public class ClienteDAO {
 
         return cliente;
 
+    }
+
+    public void alterarCliente(Cliente cliente) throws ExceptionDAO{
+        String querySQL = "Update cliente set nome = ?, apelido = ?, dataDeNascimento = ?, estadoCivil = ?, profissao = ?," +
+                " morada = ?, email = ?, numeroDeBI = ?, contacto = ?, contactoAlternativo = ?, nuit = ?, genero = ? where codigoDeCliente = ?";
+
+        PreparedStatement preparedStatement = null;
+        Connection conexao = null;
+
+        try{
+            conexao = new ConnectionMVC().getConnection();
+            preparedStatement = conexao.prepareStatement(querySQL);
+            preparedStatement.setString(1, cliente.getNome());
+            preparedStatement.setString(2, cliente.getApelido());
+            preparedStatement.setDate(3, new Date(cliente.getDataDeNascimento().getTime()));
+            preparedStatement.setString(4, cliente.getEstadoCivil());
+            preparedStatement.setString(5, cliente.getProfissao());
+            preparedStatement.setString(6, cliente.getMorada());
+            preparedStatement.setString(7, cliente.getEmail());
+            preparedStatement.setString(8, cliente.getNumeroDeBI());
+            preparedStatement.setInt(9, cliente.getContacto());
+            preparedStatement.setInt(10, cliente.getContactoAlternativo());
+            preparedStatement.setInt(11, cliente.getNuit());
+            preparedStatement.setString(12, cliente.getGenero());
+            preparedStatement.setInt(13, cliente.getCodigoDeCliente());
+            preparedStatement.execute();
+
+        }catch (SQLException e){
+            throw new ExceptionDAO("Erro ao alternar cliente " + e);
+
+        }finally {
+            try {
+                if(conexao != null)
+                    conexao.close();
+
+            }catch (SQLException e){
+                throw new ExceptionDAO("Erro ao fechar a conexão " + e);
+            }
+
+            try {
+                if(preparedStatement != null)
+                    preparedStatement.close();
+
+            }catch (SQLException e){
+                throw new ExceptionDAO("Erro ao fechar o statement " + e);
+            }
+        }
     }
 
 
