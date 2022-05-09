@@ -71,4 +71,12 @@ public class Funcionario extends Pessoa{
         return new FuncionarioDAO().encontrarFuncionarioPorEmail(email);
     }
 
+    public void alterarFuncionario(Funcionario funcionario) throws ExceptionDAO {
+        new FuncionarioDAO().alterarFuncionario(funcionario);
+    }
+
+    public void alterarSenha(Funcionario funcionario, String senha) throws ExceptionDAO{
+        new FuncionarioDAO().alterarSenha(funcionario, senha);
+    }
+
 }

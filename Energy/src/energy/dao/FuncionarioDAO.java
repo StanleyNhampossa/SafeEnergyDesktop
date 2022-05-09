@@ -132,4 +132,93 @@ public class FuncionarioDAO {
         return funcionario;
     }
 
+    public void alterarFuncionario(Funcionario funcionario) throws ExceptionDAO{
+
+        String querySQL = "update funcionario set codigoDeASC = ?, categoria = ?, nome = ?, apelido = ?, dataDeNascimento = ?, " +
+                "estadoCivil = ?, profissao = ?, morada = ?, email = ?, numeroDeBI = ?, contacto = ?, contactoAlternativo = ?, nuit = ?, genero = ? where NumeroDeFuncionario = ?";
+
+        PreparedStatement preparedStatement = null;
+        Connection conexao = null;
+
+        try {
+            conexao = new ConnectionMVC().getConnection();
+            preparedStatement = conexao.prepareStatement(querySQL);
+
+            preparedStatement.setInt(1, funcionario.getLocalDeTrabalho().getCodigoDeASC());
+            preparedStatement.setString(2, funcionario.getCategoria());
+            preparedStatement.setString(3, funcionario.getNome());
+            preparedStatement.setString(4, funcionario.getApelido());
+            preparedStatement.setDate(5, new Date(funcionario.getDataDeNascimento().getTime()));
+            preparedStatement.setString(6, funcionario.getEstadoCivil());
+            preparedStatement.setString(7, funcionario.getProfissao());
+            preparedStatement.setString(8, funcionario.getMorada());
+            preparedStatement.setString(9, funcionario.getEmail());
+            preparedStatement.setString(10, funcionario.getNumeroDeBI());
+            preparedStatement.setInt(11, funcionario.getContacto());
+            preparedStatement.setInt(12, funcionario.getContactoAlternativo());
+            preparedStatement.setInt(13, funcionario.getNuit());
+            preparedStatement.setString(14, funcionario.getGenero());
+            preparedStatement.setInt(15, funcionario.getNumeroDeFuncionario());
+
+            preparedStatement.execute();
+
+        }catch (SQLException e){
+            throw new ExceptionDAO("Erro ao alterar funcionário " + e);
+        }finally {
+
+            try {
+                if(preparedStatement != null)
+                    preparedStatement.close();
+            }catch (SQLException e){
+                throw new ExceptionDAO("Erro ao fechar statement " + e);
+            }
+
+            try {
+                if(conexao != null)
+                    conexao.close();
+            }catch (SQLException e){
+                throw new ExceptionDAO("Erro ao fechar conexão " + e);
+            }
+
+        }
+
+    }
+
+    public void alterarSenha(Funcionario funcionario, String palavraPasse) throws ExceptionDAO{
+
+        String querySQL = "update funcionario set palavraPasse = ? where numeroDeFuncionario = ?";
+
+        PreparedStatement preparedStatement = null;
+        Connection conexao = null;
+
+        try {
+             conexao = new ConnectionMVC().getConnection();
+             preparedStatement = conexao.prepareStatement(querySQL);
+
+             preparedStatement.setString(1, palavraPasse);
+             preparedStatement.setInt(2, funcionario.getNumeroDeFuncionario());
+             preparedStatement.execute();
+
+        }catch (SQLException e){
+            throw new ExceptionDAO("Erro ao alterar funcionário " + e);
+        }finally {
+
+            try {
+                if(preparedStatement != null)
+                    preparedStatement.close();
+            }catch (SQLException e){
+                throw new ExceptionDAO("Erro ao fechar statement " + e);
+            }
+
+            try {
+                if(conexao != null)
+                    conexao.close();
+            }catch (SQLException e){
+                throw new ExceptionDAO("Erro ao fechar conexão " + e);
+            }
+
+        }
+
+    }
+
 }

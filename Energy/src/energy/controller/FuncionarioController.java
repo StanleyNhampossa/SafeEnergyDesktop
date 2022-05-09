@@ -36,6 +36,32 @@ public class FuncionarioController {
         return new Funcionario().encontrarFuncionarioPorEmail(email);
     }
 
+    public boolean alterarFuncionario(int numeroDoFuncionario, String nome, String apelido, String dataDeNascimento, String estadoCivil, String profissao, String morada, String email,
+                                        String numeroDeBI, int contacto, int contactoAlternativo, int nuit, String genero, AreaDeServicoAoCliente areaDeServicoAoCliente, String categoria) throws ParseException, ExceptionDAO {
+
+        if((nome != null && nome.length() > 0) && (apelido != null && apelido.length() > 0) && dataDeNascimento.length() > 0 && validarDataDeNascimento(dataDeNascimento) && (estadoCivil != null && estadoCivil.length() > 0) &&
+                (profissao != null & profissao.length() > 0) && (morada != null && morada.length() > 0) && (email.length() > 0 && validarEmail(email)) && (numeroDeBI.length() > 0 && validarNoBI(numeroDeBI))
+                &&  (String.valueOf(contacto).length() > 0 && validarContacto(contacto)) && String.valueOf(contactoAlternativo).length() > 0 && validarContacto(contactoAlternativo) && String.valueOf(nuit).length() > 0 && validarNUIT(nuit) && validarSexo(genero) && (categoria != null && categoria.length() > 0)) {
+
+            //Ele faz a formatação da data de nascimento
+            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+            Date data = formato.parse(dataDeNascimento);
+
+            //Ele chama o método a classe da Model para poder alterar o funcionário
+            Funcionario funcionario = new Funcionario(nome, apelido, data, estadoCivil, profissao, morada, email, numeroDeBI, contacto, contactoAlternativo, nuit, genero, areaDeServicoAoCliente, categoria);
+            funcionario.setNumeroDeFuncionario(numeroDoFuncionario);
+            funcionario.alterarFuncionario(funcionario);
+
+            return true;
+
+        }
+        return false;
+    }
+
+    public void alterarSenha(Funcionario funcionario, String novaSenha) throws ExceptionDAO{
+        new Funcionario().alterarSenha(funcionario, novaSenha);
+    }
+
 
     public boolean validarSexo(String sexo){
         if(sexo == "M" || sexo == "F"){
