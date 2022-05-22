@@ -1,5 +1,8 @@
 package energy.model;
 
+import energy.dao.ExceptionDAO;
+import energy.dao.PTDAO;
+
 import java.util.ArrayList;
 
 public class PT extends Equipamentos{
@@ -12,10 +15,9 @@ public class PT extends Equipamentos{
     }
 
 
-    public PT(String provincia, String cidade, String bairro, int numeroDePT, ArrayList<Contador> contadores) {
+    public PT(String provincia, String cidade, String bairro, int numeroDePT) {
         super(provincia, cidade, bairro);
         this.numeroDePT = numeroDePT;
-        this.contadores = contadores;
     }
 
 
@@ -34,5 +36,9 @@ public class PT extends Equipamentos{
 
     public void setNumeroDePT(int numeroDePT) {
         this.numeroDePT = numeroDePT;
+    }
+
+    public void cadastarPT(PT pt)throws ExceptionDAO {
+        new PTDAO().cadastrarPT(pt);
     }
 }
