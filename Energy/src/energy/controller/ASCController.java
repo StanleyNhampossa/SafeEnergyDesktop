@@ -25,5 +25,19 @@ public class ASCController {
 
         return new AreaDeServicoAoCliente().listrarASC();
     }
+
+    public boolean alterarASC(int codigoASC, String areaDeServico, String provincia, String municipio_Cidade) throws ExceptionDAO {
+
+        if(areaDeServico.length() > 0 && areaDeServico != null && municipio_Cidade.length() > 0 && municipio_Cidade != null){
+
+            AreaDeServicoAoCliente areaDeServicoAoCliente = new AreaDeServicoAoCliente(areaDeServico, provincia, municipio_Cidade);
+            areaDeServicoAoCliente.setCodigoDeASC(codigoASC);
+            areaDeServicoAoCliente.cadastarASC(areaDeServicoAoCliente);
+
+            return true;
+        }
+
+        return false;
+    }
     
 }

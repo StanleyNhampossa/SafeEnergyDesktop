@@ -3,6 +3,7 @@ package energy.model;
 import energy.dao.ExceptionDAO;
 import energy.dao.FuncionarioDAO;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Funcionario extends Pessoa{
@@ -11,6 +12,8 @@ public class Funcionario extends Pessoa{
     protected AreaDeServicoAoCliente localDeTrabalho;
     protected String categoria;
     protected EquipasDeTrabalho equipaDeTrabalho;
+
+    protected String palavraPasse;
     protected int contactoAlternativo;
 
     public Funcionario(String nome, String apelido, Date dataDeNascimento, String estadoCivil, String nacionalidade, String morada, String email, String numeroDeBI, int contacto, int contactoAlternativo, int nuit, String genero, AreaDeServicoAoCliente localDeTrabalho, String categoria) {
@@ -77,6 +80,30 @@ public class Funcionario extends Pessoa{
 
     public void alterarSenha(Funcionario funcionario, String senha) throws ExceptionDAO{
         new FuncionarioDAO().alterarSenha(funcionario, senha);
+    }
+
+    public ArrayList<Funcionario> listarTodosFuncionarios() throws ExceptionDAO{
+        return new FuncionarioDAO().listarTodosFuncionarios();
+    }
+
+    public String getPalavraPasse() {
+        return palavraPasse;
+    }
+
+    public void setPalavraPasse(String palavraPasse) {
+        this.palavraPasse = palavraPasse;
+    }
+
+    public void deletarFuncionario(Funcionario funcionario)throws ExceptionDAO{
+        new FuncionarioDAO().deletarFuncionario(funcionario);
+    }
+
+    public Funcionario encontrarFuncionarioPorID(int id) throws ExceptionDAO{
+        return new FuncionarioDAO().encontrarFuncionarioPorId(id);
+    }
+
+    public String toString(){
+        return nome + " " + apelido;
     }
 
 }

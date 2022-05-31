@@ -1,7 +1,6 @@
 package energy.dao;
 
 import energy.model.AreaDeServicoAoCliente;
-import energy.model.Cliente;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,7 +20,7 @@ public class ASCDAO {
 
         try {
 
-            conexao = new ConnectionMVC().getConnection();
+            conexao = new ConnectionLocal().getConnection();
             preparedStatement = conexao.prepareStatement(sql);
 
             preparedStatement.setString(1, areaDeServicoAoCliente.getProvincia());
@@ -66,7 +65,7 @@ public class ASCDAO {
 
         try {
 
-            conexao = new ConnectionMVC().getConnection();
+            conexao = new ConnectionLocal().getConnection();
             preparedStatement = conexao.prepareStatement(sql);
 
             ResultSet resultSet = preparedStatement.executeQuery(sql);
@@ -122,7 +121,7 @@ public class ASCDAO {
         AreaDeServicoAoCliente areaDeServicoAoCliente = null;
 
         try {
-            conexao = new ConnectionMVC().getConnection();
+            conexao = new ConnectionLocal().getConnection();
             preparedStatement = conexao.prepareStatement(querySQL);
 
             preparedStatement.setInt(1, id);
@@ -137,6 +136,42 @@ public class ASCDAO {
         }
 
         return areaDeServicoAoCliente;
+
+    }
+
+    public void alterarASC(AreaDeServicoAoCliente asc) throws ExceptionDAO{
+
+        String querySQL = "update AreaDeServicoAoCliente set provincia = ?, cidade_Municipio = ?, areaDeServico = ? where codigoDeASC = ?";
+
+        Connection conexao = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            conexao = new ConnectionLocal().getConnection();
+            preparedStatement = conexao.prepareStatement(querySQL);
+            preparedStatement.setString(1, asc.getProvincia());
+            preparedStatement.setString(2, asc.getCidade_Municipio());
+            preparedStatement.setString(3, asc.getAreaDeServico());
+            preparedStatement.setInt(4, asc.getCodigoDeASC());
+            preparedStatement.execute();
+
+        }catch (SQLException e){
+            throw new ExceptionDAO("Erro ao editar Área de Serviço ao Cliente " + e);
+        }finally {
+            try {
+                if(conexao != null)
+                    conexao.close();
+            }catch (SQLException e){
+                throw new ExceptionDAO("Erro ao fechar conexão " + e);
+            }
+
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            }catch (SQLException e){
+                throw new ExceptionDAO("Erro ao fechar o statement " + e);
+            }
+        }
 
     }
 

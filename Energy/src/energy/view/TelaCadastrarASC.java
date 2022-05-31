@@ -26,12 +26,21 @@ public class TelaCadastrarASC extends JFrame implements ActionListener {
 
     public TelaCadastrarASC(){
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
         setSize(500, 350); //
         setVisible(true);
         setTitle("Cadastrar ASC");
         setResizable(false);
         getContentPane().setBackground(colorTangerine);
+
+        /* Permite com que a tela seja aberta no meio do ecrã
+         * O método setLocationRelativeTo() não funcionava e por isso
+         * Foi adoptado esse método
+         */
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        Dimension tela = tk.getScreenSize();
+        int alturaDaTela = tela.height;
+        int larguraDaTela = tela.width;
+        setLocation( (larguraDaTela - getWidth())/2, (alturaDaTela - getHeight())/2);
 
     }
 
@@ -120,10 +129,5 @@ public class TelaCadastrarASC extends JFrame implements ActionListener {
 
     }
 
-    public static void main(String[] args) {
-
-        new TelaCadastrarASC().Tela();
-
-    }
 
 }

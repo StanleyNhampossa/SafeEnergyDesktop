@@ -20,18 +20,23 @@ public class TelaRecuperarAPassword extends JFrame implements ActionListener {
     JButton JbVoltar = new JButton(" Voltar");
 
     public TelaRecuperarAPassword() {
-        Toolkit kit = Toolkit.getDefaultToolkit();
-        Dimension telaTamanho = kit.getScreenSize();
-//        int largura=telaTamanho.width;
-//        int altura= telaTamanho.height;
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // funcao para fechar a tela do programa.
-        setVisible(true); // faz com que a tela fique visivel.
-        setLocationRelativeTo(null); // Reposicciona a tela do programa.
-        //setLocation(largura,altura);
-        setResizable(false);//  faz com que a tela minimize ou maximize.
-        setSize(500, 325); // As Dimencoes da tela 
-        setTitle(" Recuperar a Conta "); //  Titulo da tela.
-    } // fim de contruttor
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+        setLocationRelativeTo(null);
+        setResizable(false);
+        setSize(500, 325);
+        setTitle(" Recuperar a Conta ");
+
+        /* Permite com que a tela seja aberta no meio do ecrã
+         * O método setLocationRelativeTo() não funcionava e por isso
+         * Foi adoptado esse método
+         */
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        Dimension tela = tk.getScreenSize();
+        int alturaDaTela = tela.height;
+        int larguraDaTela = tela.width;
+        setLocation( (larguraDaTela - getWidth())/2, (alturaDaTela - getHeight())/2);
+    }
 
     public void gui() {
 

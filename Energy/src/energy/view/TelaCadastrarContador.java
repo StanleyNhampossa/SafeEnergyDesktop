@@ -140,7 +140,4 @@ public class TelaCadastrarContador extends JFrame implements ActionListener {
 
 
 
-    public static void main(String[] args) {
-        new TelaCadastrarContador().telaCadastrarContador();
-    }
 }

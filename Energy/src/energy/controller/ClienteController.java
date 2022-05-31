@@ -3,7 +3,6 @@ package energy.controller;
 
 import energy.dao.ClienteDAO;
 import energy.dao.ExceptionDAO;
-import energy.escritadocx.NovoCliente;
 import energy.model.Cliente;
 import energy.model.Contador;
 
@@ -21,7 +20,7 @@ public class ClienteController {
                 (profissao != null & profissao.length() > 0) && (morada != null && morada.length() > 0) && (email.length() > 0 && validarEmail(email)) && (numeroDeBI.length() > 0 && validarNoBI(numeroDeBI))
                 &&  (String.valueOf(contacto).length() > 0 && validarContacto(contacto)) && String.valueOf(contactoAlternativo).length() > 0 && validarContacto(contactoAlternativo) && String.valueOf(nuit).length() > 0 && validarNUIT(nuit) && validarSexo(genero)) {
 
-            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/YYYY");
+            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
 
             Date data = formato.parse(dataDeNascimento);
 
@@ -31,7 +30,6 @@ public class ClienteController {
 
             Cliente cliente = new Cliente(nome, apelido, data, estadoCivil, profissao, morada, email, numeroDeBI, contacto, contactoAlternativo, nuit, genero, contadores);
 
-            cliente.setPalavraPasse(apelido + nuit);
             cliente.cadastarCliente(cliente);
 
 
@@ -65,7 +63,7 @@ public class ClienteController {
     }
 
     public boolean alterarCliente(int codigoDoCliente, String nome, String apelido, String dataDeNascimento, String estadoCivil, String profissao, String morada, String email,
-                                   String numeroDeBI, int contacto, int contactoAlternativo, int nuit, String genero, int numeroDeContador) throws ParseException, ExceptionDAO {
+                                   String numeroDeBI, int contacto, int contactoAlternativo, int nuit, String genero) throws ParseException, ExceptionDAO {
 
         if( (nome != null && nome.length() > 0) && (apelido != null && apelido.length() > 0) && dataDeNascimento.length() > 0 && validarDataDeNascimento(dataDeNascimento) && (estadoCivil != null && estadoCivil.length() > 0) &&
                 (profissao != null & profissao.length() > 0) && (morada != null && morada.length() > 0) && (email.length() > 0 && validarEmail(email)) && (numeroDeBI.length() > 0 && validarNoBI(numeroDeBI))
@@ -87,6 +85,10 @@ public class ClienteController {
         return false;
     }
 
+    public Cliente encontrarClientePorID(int id)throws ExceptionDAO{
+        return new Cliente().encontrarClientePorID(id);
+    }
+
     public boolean validarSexo(String sexo){
         if(sexo == "M" || sexo == "F"){
             return true;
@@ -94,7 +96,6 @@ public class ClienteController {
 
         return false;
     }
-
 
 
     public boolean validarDataDeNascimento(String dataDeNascimento){
@@ -130,6 +131,8 @@ public class ClienteController {
 
     public boolean validarContacto(int contacto){
         //if(contacto.matches("[82-87]+[0-9]*{5}"))
+//        if(String.valueOf(contacto).matches("^\"))
+        String padrao = "";
 
 
         return true;

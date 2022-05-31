@@ -1,6 +1,7 @@
 package energy.view;
 
 import energy.controller.PTController;
+import energy.model.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,6 +10,7 @@ import java.awt.event.ActionListener;
 
 public class TelaCadastrarPT extends JFrame implements ActionListener {
 
+    Usuario usuario;
     private JLabel lblNumeroDoPT = new JLabel("Numero de PT");
     private JTextField txtNumeroDoPt = new JTextField();
 
@@ -24,12 +26,13 @@ public class TelaCadastrarPT extends JFrame implements ActionListener {
 
     private JButton btnSalvar = new JButton("Salvar");
     private JButton btnLimpar = new JButton("Limpar");
-    private JButton btnCancelar = new JButton("Cancelar");
+    private JButton btnVoltar = new JButton("Voltar");
 
     private Color tangerine = new Color(255, 185, 57);
 
 
-    public TelaCadastrarPT(){
+    public TelaCadastrarPT(Usuario usuario){
+        this.usuario = usuario;
         setVisible(true);
         setResizable(false);
         setTitle("Cadastrar Contador");
@@ -60,7 +63,7 @@ public class TelaCadastrarPT extends JFrame implements ActionListener {
         txtBairro.setBounds(170, 175, 305, 25);
         btnSalvar.setBounds(170, 220, 95, 25);
         btnLimpar.setBounds(275, 220, 95, 25);
-        btnCancelar.setBounds(380, 220, 95, 25);
+        btnVoltar.setBounds(380, 220, 95, 25);
     }
 
     private void adicionarATelaAsComponentes(){
@@ -73,7 +76,7 @@ public class TelaCadastrarPT extends JFrame implements ActionListener {
         add(lblBairro);
         add(txtBairro);
         add(btnSalvar);
-        add(btnCancelar);
+        add(btnVoltar);
         add(btnLimpar);
     }
 
@@ -94,7 +97,7 @@ public class TelaCadastrarPT extends JFrame implements ActionListener {
     private void adicionarComponentesAEscuta(){
         btnSalvar.addActionListener(this);
         btnLimpar.addActionListener(this);
-        btnCancelar.addActionListener(this);
+        btnVoltar.addActionListener(this);
     }
 
     public void limparTela(){
@@ -114,8 +117,9 @@ public class TelaCadastrarPT extends JFrame implements ActionListener {
             limparTela();
         }
 
-        if(e.getSource() == btnCancelar){
-
+        if(e.getSource() == btnVoltar){
+            this.dispose();
+            new TelaFuncionarioMenuPT(usuario).telaMenuClienteFuncionario();
         }
     }
 
@@ -134,7 +138,6 @@ public class TelaCadastrarPT extends JFrame implements ActionListener {
         }catch (Exception FormatNumberException){
             JOptionPane.showMessageDialog(null, "Digite um número válido para PT");
         }
-
     }
 
     public void telaCadastrarPT(){
@@ -144,7 +147,4 @@ public class TelaCadastrarPT extends JFrame implements ActionListener {
         adicionarDadosAsComponentes();
     }
 
-    public static void main(String[] args) {
-        new TelaCadastrarPT().telaCadastrarPT();
-    }
 }

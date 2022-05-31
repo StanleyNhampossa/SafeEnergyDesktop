@@ -6,6 +6,7 @@ import energy.model.Funcionario;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class FuncionarioController {
@@ -58,8 +59,27 @@ public class FuncionarioController {
         return false;
     }
 
+    public ArrayList<Funcionario> listarTodosFuncionarios() throws ExceptionDAO{
+        return new Funcionario().listarTodosFuncionarios();
+    }
+
     public void alterarSenha(Funcionario funcionario, String novaSenha) throws ExceptionDAO{
         new Funcionario().alterarSenha(funcionario, novaSenha);
+    }
+
+    public boolean deletarFuncionario(int id)throws ExceptionDAO{
+        if(id != 0){
+            Funcionario funcionario = new Funcionario();
+            funcionario.setNumeroDeFuncionario(id);
+            funcionario.deletarFuncionario(funcionario);
+            return true;
+        }
+
+        return false;
+    }
+
+    public Funcionario encontrarFuncionarioPorID(int id)throws ExceptionDAO{
+        return new Funcionario().encontrarFuncionarioPorID(id);
     }
 
 

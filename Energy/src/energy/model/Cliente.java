@@ -70,4 +70,8 @@ public class Cliente extends Pessoa {
     public void alterarCliente(Cliente cliente) throws ExceptionDAO{
         new ClienteDAO().alterarCliente(cliente);
     }
+
+    public Cliente encontrarClientePorID(int id) throws ExceptionDAO{
+        return new ClienteDAO().encontrarClientePorID(id);
+    }
 }

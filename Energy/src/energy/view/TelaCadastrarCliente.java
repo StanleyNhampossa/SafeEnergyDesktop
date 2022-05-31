@@ -1,16 +1,22 @@
 package energy.view;
 
+import com.toedter.calendar.JDateChooser;
 import energy.controller.ClienteController;
 import energy.controller.ContadorController;
+import energy.model.PedidoDeNovosContratos;
+import energy.model.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import javax.swing.text.MaskFormatter;
 
 public class TelaCadastrarCliente extends JFrame implements ActionListener {
+
+    Usuario usuario;
 
     JLabel lblCodigoDoCliente = new JLabel("Código do Cliente");
     JTextField txtCodigoDoCliente = new JTextField();
@@ -37,6 +43,8 @@ public class TelaCadastrarCliente extends JFrame implements ActionListener {
     JTextField txtNumeroDeContador = new JTextField();
 
     JLabel lblDataDeNascimento = new JLabel("Data de Nascimento");
+
+    JDateChooser JDataFormatada = new JDateChooser();
     MaskFormatter MascaraData = null;
 
     JLabel lblProfissao = new JLabel("Profissão");
@@ -78,17 +86,39 @@ public class TelaCadastrarCliente extends JFrame implements ActionListener {
     public TelaCadastrarCliente() {
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
         setSize(989, 612); // 
         setVisible(true);
         setTitle("Cadastrar Clientes");
         setResizable(false);
         getContentPane().setBackground(tangerine);
 
+        /* Permite com que a tela seja aberta no meio do ecrã
+         * O método setLocationRelativeTo() não funcionava e por isso
+         * Foi adoptado esse método
+         */
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        Dimension tela = tk.getScreenSize();
+        int alturaDaTela = tela.height;
+        int larguraDaTela = tela.width;
+        setLocation( (larguraDaTela - getWidth())/2, (alturaDaTela - getHeight())/2);
+
     }
 
-    public void Tela() {
+    public void preencherDadosNosCampos(PedidoDeNovosContratos pedidoDeNovosContratos, Usuario usuario){
+        this.usuario = usuario;
 
+        this.Tela(usuario);
+
+        txtNome.setText(pedidoDeNovosContratos.getNomeDoCliente());
+        txtContacto.setText(String.valueOf(pedidoDeNovosContratos.getContacto()));
+        txtEmail.setText(pedidoDeNovosContratos.getEmail());
+        JDataFormatada.setDate(pedidoDeNovosContratos.getDataDeNascimento());
+        txtMorada.setText(pedidoDeNovosContratos.getLocalizacaoDaCasa() + " Casa " + pedidoDeNovosContratos.getNumeroDaCasa());
+
+    }
+
+    public void Tela(Usuario usuario) {
+        this.usuario = usuario;
         setLayout(null);
 
         lblCodigoDoCliente.setBounds(20, 40, 120, 30);
@@ -135,6 +165,9 @@ public class TelaCadastrarCliente extends JFrame implements ActionListener {
 
         lblEstadoCivil.setBounds(450, 320, 120, 25);
         cbEstadoCivil.setBounds(610, 320, 120, 25);
+
+        lblDataDeNascimento.setBounds(450, 240, 130, 25);
+        JDataFormatada.setBounds(610, 240, 130, 25);
 
         lblContacto.setBounds(20, 430, 120, 25);
         txtContacto.setBounds(155, 430, 120, 25);
@@ -193,21 +226,11 @@ public class TelaCadastrarCliente extends JFrame implements ActionListener {
         add(btnMudarCorBranco);
         add(btnMudarCorLaranja);
 
+        add(JDataFormatada);
+
         bgSexo.add(rbSexoFeminino);
         bgSexo.add(rbSexoMasculino);
 
-        try {
-
-            MascaraData = new MaskFormatter("##/##/####");
-
-        } catch (ParseException excp) {
-            System.err.println("Erro na formatação: " + excp.getMessage());
-            System.exit(-1);
-        }
-        jFormattedTextData = new JFormattedTextField(MascaraData);
-        add(jFormattedTextData);
-        lblDataDeNascimento.setBounds(450, 240, 130, 25);
-        jFormattedTextData.setBounds(610, 240, 130, 25);
 
         cbEstadoCivil.addItem("Solteiro");
         cbEstadoCivil.addItem("Casado");
@@ -218,7 +241,7 @@ public class TelaCadastrarCliente extends JFrame implements ActionListener {
         btnMudarCorLaranja.addActionListener(this);
 
         btnSalvar.addActionListener(this);
-
+        btnVoltar.addActionListener(this);
     }
 
 
@@ -260,9 +283,10 @@ public class TelaCadastrarCliente extends JFrame implements ActionListener {
                 sucessoCadastrarContador = contadorController.cadastarContador(Integer.parseInt(txtNumeroDeContador.getText()));
 
 
-
+                SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+                String anoStr = formato.format(JDataFormatada.getDate());
                 ClienteController clienteController = new ClienteController();
-                sucessoCadastrarCliente = clienteController.cadastarCliente(txtNome.getText(), txtApelido.getText(), jFormattedTextData.getText(), cbEstadoCivil.getSelectedItem().toString(),
+                sucessoCadastrarCliente = clienteController.cadastarCliente(txtNome.getText(), txtApelido.getText(), anoStr, cbEstadoCivil.getSelectedItem().toString(),
                         txtProfissao.getText(), txtMorada.getText(), txtEmail.getText(), txtNoBI.getText(), Integer.parseInt(txtContacto.getText()),
                         Integer.parseInt(txtContactoAlternativo.getText()), Integer.parseInt(txtNUIT.getText()), sexo, Integer.parseInt(txtNumeroDeContador.getText()));
 
@@ -282,12 +306,13 @@ public class TelaCadastrarCliente extends JFrame implements ActionListener {
 
         }
 
+        if(e.getSource() == btnVoltar){
+            dispose();
+            new TelaFuncionarioMenuCliente(usuario).telaMenuClienteFuncionario();
+        }
+
     }
 
-    public static void main(String[] args) {
 
-        new TelaCadastrarCliente().Tela();
-
-    }
 
 }

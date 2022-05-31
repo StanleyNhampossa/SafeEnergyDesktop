@@ -75,6 +75,9 @@ public class AreaDeServicoAoCliente {
         return new ASCDAO().listarTodasASC();
     }
 
+    public void alterarASC(AreaDeServicoAoCliente areaDeServicoAoCliente) throws ExceptionDAO {
+        new ASCDAO().alterarASC(areaDeServicoAoCliente);
+    }
 
 
 }

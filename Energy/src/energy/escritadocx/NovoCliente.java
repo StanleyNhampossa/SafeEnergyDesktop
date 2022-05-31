@@ -1,9 +1,9 @@
 package energy.escritadocx;
 
 import energy.model.Cliente;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
+//import org.apache.poi.xwpf.usermodel.XWPFDocument;
+//import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+//import org.apache.poi.xwpf.usermodel.XWPFRun;
 
 import java.io.File;
 import java.io.FileNotFoundException;

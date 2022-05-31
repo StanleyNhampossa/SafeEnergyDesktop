@@ -3,7 +3,12 @@ package energy.dao;
 import energy.model.AreaDeServicoAoCliente;
 import energy.model.Funcionario;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Date;
+import java.util.ArrayList;
 
 public class FuncionarioDAO {
 
@@ -17,7 +22,7 @@ public class FuncionarioDAO {
         Connection conexao = null;
 
         try {
-            conexao = new ConnectionMVC().getConnection();
+            conexao = new ConnectionLocal().getConnection();
             preparedStatement = conexao.prepareStatement(querySQL);
 
             preparedStatement.setInt(1, funcionario.getLocalDeTrabalho().getCodigoDeASC());
@@ -60,6 +65,78 @@ public class FuncionarioDAO {
 
     }
 
+    public ArrayList<Funcionario> listarTodosFuncionarios() throws ExceptionDAO{
+        String querySQL = "select * from funcionario join areadeservicoaocliente a on a.codigoDeASC = funcionario.codigoDeASC where status = 1";
+
+        Connection conexao = null;
+        PreparedStatement preparedStatement = null;
+        ArrayList<Funcionario> funcionarios = null;
+
+        try {
+            conexao = new ConnectionLocal().getConnection();
+            preparedStatement = conexao.prepareStatement(querySQL);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet != null){
+                funcionarios = new ArrayList<>();
+
+                while (resultSet.next()){
+                    Funcionario funcionario = new Funcionario();
+                    AreaDeServicoAoCliente asc = new AreaDeServicoAoCliente();
+
+                    funcionario.setNumeroDeFuncionario(resultSet.getInt(1));
+
+                    funcionario.setCategoria(resultSet.getString(4));
+
+                    funcionario.setNome(resultSet.getString(5));
+                    funcionario.setApelido(resultSet.getString(6));
+                    funcionario.setPalavraPasse(resultSet.getString(7));
+                    funcionario.setDataDeNascimento(resultSet.getDate(8));
+                    funcionario.setEstadoCivil(resultSet.getString(9));
+                    funcionario.setProfissao(resultSet.getString(10));
+                    funcionario.setMorada(resultSet.getString(11));
+                    funcionario.setEmail(resultSet.getString(12));
+                    funcionario.setNumeroDeBI(resultSet.getString(13));
+                    funcionario.setContacto(resultSet.getInt(14));
+                    funcionario.setContactoAlternativo(resultSet.getInt(15));
+                    funcionario.setNuit(resultSet.getInt(16));
+                    funcionario.setGenero(resultSet.getString(17));
+
+                    asc.setCodigoDeASC(resultSet.getInt(19));
+                    asc.setProvincia(resultSet.getString(20));
+                    asc.setCidade_Municipio(resultSet.getString(21));
+                    asc.setAreaDeServico(resultSet.getString(22));
+
+                    funcionario.setLocalDeTrabalho(asc);
+
+                    funcionarios.add(funcionario);
+                }
+            }
+
+        }catch (SQLException e){
+            throw new ExceptionDAO("Erro ao listar funcionário " + e);
+        }finally {
+
+            try {
+                if(preparedStatement != null)
+                    preparedStatement.close();
+            }catch (SQLException e){
+                throw new ExceptionDAO("Erro ao fechar statement " + e);
+            }
+
+            try {
+                if(conexao != null)
+                    conexao.close();
+            }catch (SQLException e){
+                throw new ExceptionDAO("Erro ao fechar conexão " + e);
+            }
+
+        }
+
+        return funcionarios;
+    }
+
     public Funcionario encontrarFuncionarioPorEmail(String email) throws ExceptionDAO{
 
         String querySQL = "select * from funcionario where email = ?";
@@ -70,7 +147,7 @@ public class FuncionarioDAO {
         Funcionario funcionario = null;
 
         try {
-            conexao = new ConnectionMVC().getConnection();
+            conexao = new ConnectionLocal().getConnection();
             preparedStatement = conexao.prepareStatement(querySQL);
 
             preparedStatement.setString(1, email);
@@ -98,14 +175,77 @@ public class FuncionarioDAO {
                 funcionario.setNuit(resultSet.getInt(16));
                 funcionario.setGenero(resultSet.getString(17));
 
-                /*
-                numeroDeFuncionario int auto_increment not null,
-                codigoDeASC int,
-                numeroDaEquipa int,
-
-                 */
+            }
 
 
+        }catch (SQLException e){
+            throw new ExceptionDAO("Erro ao consultar funcionário " + e);
+        }finally {
+            try {
+                if(conexao != null)
+                    conexao.close();
+
+            }catch (SQLException e){
+                throw new ExceptionDAO("Erro ao fechar a conexão " + e);
+            }
+
+            try {
+                if(preparedStatement != null)
+                    preparedStatement.close();
+
+            }catch (SQLException e){
+                throw new ExceptionDAO("Erro ao fechar o statement " + e);
+            }
+        }
+
+        return funcionario;
+    }
+
+    public Funcionario encontrarFuncionarioPorId(int id) throws ExceptionDAO{
+
+        String querySQL = "select * from funcionario join areadeservicoaocliente a on a.codigoDeASC = funcionario.codigoDeASC where numeroDeFuncionario = ?";
+
+        Connection conexao = null;
+        PreparedStatement preparedStatement = null;
+
+        Funcionario funcionario = null;
+
+        try {
+            conexao = new ConnectionLocal().getConnection();
+            preparedStatement = conexao.prepareStatement(querySQL);
+
+            preparedStatement.setInt(1, id);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()){
+                funcionario = new Funcionario();
+
+                funcionario.setNumeroDeFuncionario(resultSet.getInt(1));
+                //funcionario.setLocalDeTrabalho((AreaDeServicoAoCliente) resultSet.getObject(2));
+                //funcionario.setEquipaDeTrabalho();
+//                funcionario.setLo
+                funcionario.setCategoria(resultSet.getString(4));
+                funcionario.setNome(resultSet.getString(5));
+                funcionario.setApelido(resultSet.getString(6));
+                funcionario.setPalavraPasse(resultSet.getString(7));
+                funcionario.setDataDeNascimento(resultSet.getDate(8));
+                funcionario.setEstadoCivil(resultSet.getString(9));
+                funcionario.setProfissao(resultSet.getString(10));
+                funcionario.setMorada(resultSet.getString(11));
+                funcionario.setEmail(resultSet.getString(12));
+                funcionario.setNumeroDeBI(resultSet.getString(13));
+                funcionario.setContacto(resultSet.getInt(14));
+                funcionario.setContactoAlternativo(resultSet.getInt(15));
+                funcionario.setNuit(resultSet.getInt(16));
+                funcionario.setGenero(resultSet.getString(17));
+                AreaDeServicoAoCliente asc = new AreaDeServicoAoCliente();
+                asc.setCodigoDeASC(resultSet.getInt(19));
+                asc.setProvincia(resultSet.getString(20));
+                asc.setCidade_Municipio(resultSet.getString(21));
+                asc.setAreaDeServico(resultSet.getString(22));
+
+                funcionario.setLocalDeTrabalho(asc);
             }
 
 
@@ -141,7 +281,7 @@ public class FuncionarioDAO {
         Connection conexao = null;
 
         try {
-            conexao = new ConnectionMVC().getConnection();
+            conexao = new ConnectionLocal().getConnection();
             preparedStatement = conexao.prepareStatement(querySQL);
 
             preparedStatement.setInt(1, funcionario.getLocalDeTrabalho().getCodigoDeASC());
@@ -192,7 +332,7 @@ public class FuncionarioDAO {
         Connection conexao = null;
 
         try {
-             conexao = new ConnectionMVC().getConnection();
+             conexao = new ConnectionLocal().getConnection();
              preparedStatement = conexao.prepareStatement(querySQL);
 
              preparedStatement.setString(1, palavraPasse);
@@ -220,5 +360,42 @@ public class FuncionarioDAO {
         }
 
     }
+
+    public void deletarFuncionario(Funcionario funcionario) throws ExceptionDAO{
+
+        String querySQL = "delete from funcionario where numeroDeFuncionario = ?";
+        String query = "update funcionario set status = 0 where numeroDeFuncionario = ?";
+        Connection conexao = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            conexao = new ConnectionLocal().getConnection();
+            preparedStatement = conexao.prepareStatement(query);
+            preparedStatement.setInt(1, funcionario.getNumeroDeFuncionario());
+            preparedStatement.execute();
+
+
+        }catch (SQLException e){
+            throw new ExceptionDAO("Erro ao deletar funcionário " + e);
+        }finally {
+
+            try {
+                if (preparedStatement != null)
+                    preparedStatement.close();
+            } catch (SQLException e) {
+                throw new ExceptionDAO("Erro ao fechar statement " + e);
+            }
+
+            try {
+                if (conexao != null)
+                    conexao.close();
+            } catch (SQLException e) {
+                throw new ExceptionDAO("Erro ao fechar conexão " + e);
+            }
+
+        }
+
+    }
+
 
 }

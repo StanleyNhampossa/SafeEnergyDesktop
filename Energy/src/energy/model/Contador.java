@@ -26,12 +26,11 @@ public class Contador extends Equipamentos{
         this.numeroDeContador = numeroDeContador;
     }
 
-    public Contador(String provincia, String cidade, String bairro, int numeroDeContador, String casa, Cliente proprietario, ArrayList<PT> pt) {
+    public Contador(String provincia, String cidade, String bairro, int numeroDeContador, String casa, Cliente proprietario) {
         super(provincia, cidade, bairro);
         this.numeroDeContador = numeroDeContador;
         this.casa = casa;
         this.proprietario = proprietario;
-        this.pt = pt;
     }
 
     public ArrayList<PT> getPt() {
@@ -68,5 +67,17 @@ public class Contador extends Equipamentos{
 
     public void cadastrarContador(Contador contador) throws ExceptionDAO {
         new ContadorDAO().cadastrarContador(contador);
+    }
+
+    public ArrayList<Contador> listarTodosContadores()throws ExceptionDAO{
+        return new ContadorDAO().listarTodosContadores();
+    }
+
+    public Contador listarContadorPorID(int id)throws ExceptionDAO{
+        return new ContadorDAO().listarPorID(id);
+    }
+
+    public void editarContador(Contador contador)throws ExceptionDAO{
+        new ContadorDAO().editarContador(contador);
     }
 }

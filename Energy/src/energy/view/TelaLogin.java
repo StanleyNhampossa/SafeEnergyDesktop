@@ -48,11 +48,20 @@ public class TelaLogin extends JFrame implements ActionListener{
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // funcao para fechar a tela do programa.
         setVisible(true); // faz com que a tela fique visivel.
-        setLocationRelativeTo(null); // Reposicciona a tela do programa.
         setResizable(false);//  faz com que a tela minimize ou maximize.
         setSize(500, 325); // As Dimencoes da tela 
         setTitle(" Login "); //  Titulo da tela.
-    } // fim de contruttor
+
+        /* Permite com que a tela seja aberta no meio do ecrã
+         * O método setLocationRelativeTo() não funcionava e por isso
+         * Foi adoptado esse método
+         */
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        Dimension tela = tk.getScreenSize();
+        int alturaDaTela = tela.height;
+        int larguraDaTela = tela.width;
+        setLocation( (larguraDaTela - getWidth())/2, (alturaDaTela - getHeight())/2);
+    }
 
     public void gui() {
 
@@ -163,11 +172,11 @@ public class TelaLogin extends JFrame implements ActionListener{
         if(funcionario != null) {
             usuario = new Usuario();
             usuario.setNome(funcionario.getNome());
-            usuario.setNome(funcionario.getApelido());
+            usuario.setApelido(funcionario.getApelido());
             usuario.setCategoria(funcionario.getCategoria());
             usuario.setNumeroDeFuncionario(funcionario.getNumeroDeFuncionario());
             usuario.setLocalDeTrabalho(funcionario.getLocalDeTrabalho());
-            funcionario.setEquipaDeTrabalho(funcionario.getEquipaDeTrabalho());
+            usuario.setEquipaDeTrabalho(funcionario.getEquipaDeTrabalho());
             usuario.setPalavraPasse(funcionario.getPalavraPasse());
             usuario.setDataDeNascimento(funcionario.getDataDeNascimento());
             usuario.setEstadoCivil(funcionario.getEstadoCivil());
@@ -198,9 +207,9 @@ public class TelaLogin extends JFrame implements ActionListener{
             if (email.equals(usuario.getEmail()) && senha.equals(usuario.getPalavraPasse())) {
                 dispose();
                 if(usuario.getCategoria().equals("Administrador"))
-                    new TelaAdministracao().gui();
+                    new TelaAdministradorMenuPrincipal(usuario).telaMenuPrincipalAdministrador();
                 else
-                    new TelaDeFuncionarios().gui();
+                    new TelaFuncionarioMenuPrincipal(usuario).telaMenuClienteFuncionario();
             }
 
             else {
@@ -216,11 +225,7 @@ public class TelaLogin extends JFrame implements ActionListener{
 
     }
 
-    public static void main(String[] args) {
 
-        new TelaLogin().gui();
-
-    }
 
    
 }

@@ -1,18 +1,23 @@
 package energy.view;
 
+import com.toedter.calendar.JDateChooser;
 import energy.controller.ASCController;
 import energy.controller.FuncionarioController;
 import energy.dao.ExceptionDAO;
 import energy.model.AreaDeServicoAoCliente;
+import energy.model.Usuario;
+
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class TelaCadastrarFuncionario extends JFrame implements ActionListener{
+
+    Usuario usuario;
 
         private JLabel lblNome = new JLabel("Nome (e outros)");
         private JTextField txtNome = new JTextField();
@@ -35,6 +40,8 @@ public class TelaCadastrarFuncionario extends JFrame implements ActionListener{
         private JLabel lblDataDeNascimento = new JLabel("Data de Nascimento");
         private MaskFormatter MascaraData = null;
 
+        JDateChooser JDataFormatada = new JDateChooser();
+
         private JLabel lblProfissao = new JLabel("Profissão");
         private JTextField txtProfissao = new JTextField();
 
@@ -45,7 +52,7 @@ public class TelaCadastrarFuncionario extends JFrame implements ActionListener{
         private JTextField txtContactoAlternativo = new JTextField();
 
         private JButton btnSalvar = new JButton("SALVAR");
-        private JButton btnCancelar = new JButton("CANCELAR");
+        private JButton btnLimpar = new JButton("Limpar");
         private JButton btnVoltar = new JButton("VOLTAR");
 
         private JLabel lblSexo = new JLabel("Sexo");
@@ -77,15 +84,25 @@ public class TelaCadastrarFuncionario extends JFrame implements ActionListener{
 
         public TelaCadastrarFuncionario() {
             setDefaultCloseOperation(EXIT_ON_CLOSE);
-            setLocationRelativeTo(null);
             setSize(989, 612); //
             setVisible(true);
-            setTitle("Cadastrar Clientes");
+            setTitle("Cadastrar Funcionários");
             setResizable(false);
             getContentPane().setBackground(tangerine);
+
+            /* Permite com que a tela seja aberta no meio do ecrã
+             * O método setLocationRelativeTo() não funcionava e por isso
+             * Foi adoptado esse método
+             */
+            Toolkit tk = Toolkit.getDefaultToolkit();
+            Dimension tela = tk.getScreenSize();
+            int alturaDaTela = tela.height;
+            int larguraDaTela = tela.width;
+            setLocation( (larguraDaTela - getWidth())/2, (alturaDaTela - getHeight())/2);
         }
 
-        public void Tela() {
+        public void Tela(Usuario usuarioActual) {
+            usuario = usuarioActual;
             setLayout(null);
 
             Font fontes = new Font("Mongolian Baiti", Font.ITALIC, 32);
@@ -142,8 +159,11 @@ public class TelaCadastrarFuncionario extends JFrame implements ActionListener{
             lblContactoAlternativo.setBounds(340, 385, 120, 25);
             txtContactoAlternativo.setBounds(475, 385, 120, 25);
 
+            lblDataDeNascimento.setBounds(450, 210, 130, 25);
+            JDataFormatada.setBounds(610, 210, 130, 25);
+
             btnSalvar.setBounds(580, 540, 100, 24);
-            btnCancelar.setBounds(700, 540, 100, 24);
+            btnLimpar.setBounds(700, 540, 100, 24);
             btnVoltar.setBounds(820, 540, 100, 25);
 
             lblMudarFundo.setBounds(20, 485, 100, 30);
@@ -198,24 +218,15 @@ public class TelaCadastrarFuncionario extends JFrame implements ActionListener{
             add(btnMudarCorBranco);
             add(btnMudarCorLaranja);
             add(btnSalvar);
-            add(btnCancelar);
+            add(btnLimpar);
             add(btnVoltar);
+
+            add(JDataFormatada);
 
             //Adicionando os sexos masculino e feminino ao Group Button
             bgSexo.add(rbSexoFeminino);
             bgSexo.add(rbSexoMasculino);
 
-            try {
-                MascaraData = new MaskFormatter("##/##/####");
-            } catch (ParseException excp) {
-                System.err.println("Erro na formatação: " + excp.getMessage());
-                System.exit(-1);
-            }
-
-            jftdDataDeNascimento = new JFormattedTextField(MascaraData);
-            add(jftdDataDeNascimento);
-            lblDataDeNascimento.setBounds(450, 210, 130, 25);
-            jftdDataDeNascimento.setBounds(610, 210, 130, 25);
 
             //Preenchendo dados da ComboBox de Estado Civil
             cbEstadoCivil.addItem("Solteiro");
@@ -244,6 +255,8 @@ public class TelaCadastrarFuncionario extends JFrame implements ActionListener{
             btnMudarCorBranco.addActionListener(this);
             btnMudarCorLaranja.addActionListener(this);
             btnSalvar.addActionListener(this);
+            btnVoltar.addActionListener(this);
+            btnLimpar.addActionListener(this);
 
         }
 
@@ -262,6 +275,22 @@ public class TelaCadastrarFuncionario extends JFrame implements ActionListener{
                 lblBarraDeCadastro.setBackground(Color.WHITE);
             }
 
+            if(e.getSource() == btnLimpar){
+                txtNome.setText("");
+                txtApelido.setText("");
+                txtContacto.setText("");
+                txtEmail.setText("");
+                txtContactoAlternativo.setText("");
+                txtProfissao.setText("");
+                txtNUIT.setText("");
+                txtNoBI.setText("");
+                txtMorada.setText("");
+                cbCategoria.setSelectedIndex(0);
+                cbEstadoCivil.setSelectedIndex(0);
+                cbAreaDeServico.setSelectedIndex(0);
+                bgSexo.clearSelection();
+            }
+
             String sexo = "0";
 
             if (e.getSource() == btnSalvar) {
@@ -278,9 +307,12 @@ public class TelaCadastrarFuncionario extends JFrame implements ActionListener{
                 //AreaDeServicoAoCliente localDeTrabalho = cbAreaDeServico.getSelectedObjects();
 
                 try{
+                    SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+                    String anoStr = formato.format(JDataFormatada.getDate());
+
                     AreaDeServicoAoCliente areaDeServicoAoCliente = (AreaDeServicoAoCliente) cbAreaDeServico.getSelectedItem();
                     FuncionarioController funcionarioController = new FuncionarioController();
-                    sucessoCadastrarFuncionario = funcionarioController.cadastrarFuncionario(txtNome.getText(), txtApelido.getText(), jftdDataDeNascimento.getText(), cbEstadoCivil.getSelectedItem().toString(), txtProfissao.getText(),
+                    sucessoCadastrarFuncionario = funcionarioController.cadastrarFuncionario(txtNome.getText(), txtApelido.getText(), anoStr, cbEstadoCivil.getSelectedItem().toString(), txtProfissao.getText(),
                             txtMorada.getText(), txtEmail.getText(), txtNoBI.getText(), Integer.parseInt(txtContacto.getText()), Integer.parseInt(txtContactoAlternativo.getText()), Integer.parseInt(txtNUIT.getText()), sexo, areaDeServicoAoCliente, cbCategoria.getSelectedItem().toString());
 
                     if(sucessoCadastrarFuncionario){
@@ -297,10 +329,11 @@ public class TelaCadastrarFuncionario extends JFrame implements ActionListener{
 
             }
 
-        }
+            if(e.getSource() == btnVoltar){
+                new TelaAdministradorMenuFuncionario(usuario).telaMenuPrincipalAdministrador();
+                this.setVisible(false);
+            }
 
-        public static void main(String[] args) {
-            new TelaCadastrarFuncionario().Tela();
         }
 
 }

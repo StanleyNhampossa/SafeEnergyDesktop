@@ -1,5 +1,8 @@
 package energy.model;
 
+import energy.dao.EquipasDeTrabalhoDAO;
+import energy.dao.ExceptionDAO;
+
 import java.util.ArrayList;
 
 public class EquipasDeTrabalho {
@@ -8,6 +11,7 @@ public class EquipasDeTrabalho {
     private Funcionario liderDaEquipa;
     private ArrayList<Funcionario> membrosDaEquipa = new ArrayList<>();
 
+    private ArrayList<Classificacao> classificacoes = new ArrayList<>();
     public int getNumeroDaEquipa() {
         return numeroDaEquipa;
     }
@@ -32,6 +36,23 @@ public class EquipasDeTrabalho {
         this.membrosDaEquipa = membrosDaEquipa;
     }
 
+    public ArrayList<Classificacao> getClassificacoes() {
+        return classificacoes;
+    }
 
+    public void setClassificacoes(ArrayList<Classificacao> classificacoes) {
+        this.classificacoes = classificacoes;
+    }
 
+    public void cadastrarEquipaDeTrabalho(EquipasDeTrabalho equipasDeTrabalho) throws ExceptionDAO{
+        new EquipasDeTrabalhoDAO().cadastraEquipaDeTrabalho(equipasDeTrabalho);
+    }
+
+    public ArrayList<EquipasDeTrabalho> listarEquipasDeTrabalho() throws ExceptionDAO{
+        return new EquipasDeTrabalhoDAO().listarEquipasDeTrabalho();
+    }
+
+    public void listarEquipaDeTrabalhoPrID(int id)throws ExceptionDAO{
+        new EquipasDeTrabalhoDAO().listarEquipasDeTrabalhoPorID(id);
+    }
 }

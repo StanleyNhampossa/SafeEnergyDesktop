@@ -1,6 +1,10 @@
 package energy.dao;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Date;
 import java.util.ArrayList;
 
 import energy.model.Cliente;
@@ -9,29 +13,28 @@ public class ClienteDAO {
 
     public void cadastrarCliente(Cliente cliente) throws ExceptionDAO{
 
-        String sql = "insert into cliente (nome, apelido, palavraPasse, dataDeNascimento, estadoCivil, profissao, morada, email, numeroDeBI, contacto," +
-                "contactoAlternativo, nuit, genero) value (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String querySQL = "insert into cliente (nome, apelido, dataDeNascimento, estadoCivil, profissao, morada, email, numeroDeBI, contacto," +
+                "contactoAlternativo, nuit, genero) value (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement preparedStatement = null;
 
         Connection conexao = null;
 
         try {
-            conexao = new ConnectionMVC().getConnection();
-            preparedStatement = conexao.prepareStatement(sql);
+            conexao = new ConnectionLocal().getConnection();
+            preparedStatement = conexao.prepareStatement(querySQL);
             preparedStatement.setString(1, cliente.getNome());
             preparedStatement.setString(2, cliente.getApelido());
-            preparedStatement.setString(3, cliente.getPalavraPasse());
-            preparedStatement.setDate(4, new Date(cliente.getDataDeNascimento().getTime()));
-            preparedStatement.setString(5, cliente.getEstadoCivil());
-            preparedStatement.setString(6, cliente.getProfissao());
-            preparedStatement.setString(7, cliente.getMorada());
-            preparedStatement.setString(8, cliente.getEmail());
-            preparedStatement.setString(9, cliente.getNumeroDeBI());
-            preparedStatement.setInt(10, cliente.getContacto());
-            preparedStatement.setInt(11, cliente.getContactoAlternativo());
-            preparedStatement.setInt(12, cliente.getNuit());
-            preparedStatement.setString(13, cliente.getGenero());
+            preparedStatement.setDate(3, new Date(cliente.getDataDeNascimento().getTime()));
+            preparedStatement.setString(4, cliente.getEstadoCivil());
+            preparedStatement.setString(5, cliente.getProfissao());
+            preparedStatement.setString(6, cliente.getMorada());
+            preparedStatement.setString(7, cliente.getEmail());
+            preparedStatement.setString(8, cliente.getNumeroDeBI());
+            preparedStatement.setInt(9, cliente.getContacto());
+            preparedStatement.setInt(10, cliente.getContactoAlternativo());
+            preparedStatement.setInt(11, cliente.getNuit());
+            preparedStatement.setString(12, cliente.getGenero());
 
             preparedStatement.execute();
 
@@ -70,7 +73,7 @@ public class ClienteDAO {
         ArrayList<Cliente> clientes = null;
 
         try {
-            conexao = new ConnectionMVC().getConnection();
+            conexao = new ConnectionLocal().getConnection();
             preparedStatement = conexao.prepareStatement(querySQL);
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -84,24 +87,40 @@ public class ClienteDAO {
                     cliente.setCodigoDeCliente(resultSet.getInt(1));
                     cliente.setNome(resultSet.getString(2));
                     cliente.setApelido(resultSet.getString(3));
-                    cliente.setPalavraPasse(resultSet.getString(4));
-                    cliente.setDataDeNascimento(resultSet.getDate(5));
-                    cliente.setEstadoCivil(resultSet.getString(6));
-                    cliente.setProfissao(resultSet.getString(7));
-                    cliente.setMorada(resultSet.getString(8));
-                    cliente.setEmail(resultSet.getString(9));
-                    cliente.setNumeroDeBI(resultSet.getString(10));
-                    cliente.setContacto(resultSet.getInt(11));
-                    cliente.setContactoAlternativo(resultSet.getInt(12));
-                    cliente.setNuit(resultSet.getInt(13));
-                    cliente.setGenero(resultSet.getString(14));
+                    cliente.setDataDeNascimento(resultSet.getDate(4));
+                    cliente.setEstadoCivil(resultSet.getString(5));
+                    cliente.setProfissao(resultSet.getString(6));
+                    cliente.setMorada(resultSet.getString(7));
+                    cliente.setEmail(resultSet.getString(8));
+                    cliente.setNumeroDeBI(resultSet.getString(9));
+                    cliente.setContacto(resultSet.getInt(10));
+                    cliente.setContactoAlternativo(resultSet.getInt(11));
+                    cliente.setNuit(resultSet.getInt(12));
+                    cliente.setGenero(resultSet.getString(13));
 
                     clientes.add(cliente);
                 }
             }
 
         }catch (SQLException e){
+            throw new ExceptionDAO("Erro ao listar cliente " + e);
+        } finally {
 
+            try {
+                if(preparedStatement != null)
+                    preparedStatement.close();
+            }catch (SQLException e){
+                throw new ExceptionDAO("Erro ao fechar o Statement" + e);
+            }
+
+
+            try {
+                if(conexao != null)
+                    conexao.close();
+
+            }catch (SQLException e){
+                throw new ExceptionDAO("Erro ao fechar conexão " + e);
+            }
         }
 
         return clientes;
@@ -126,7 +145,7 @@ public class ClienteDAO {
         ArrayList<Cliente> clientes = null;
 
         try {
-            conexao = new ConnectionMVC().getConnection();
+            conexao = new ConnectionLocal().getConnection();
             preparedStatement = conexao.prepareStatement(sql);
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -139,30 +158,24 @@ public class ClienteDAO {
                     cliente.setCodigoDeCliente(resultSet.getInt(1));
                     cliente.setNome(resultSet.getString(2));
                     cliente.setApelido(resultSet.getString(3));
-                    cliente.setPalavraPasse(resultSet.getString(4));
-                    cliente.setDataDeNascimento(resultSet.getDate(5));
-                    cliente.setEstadoCivil(resultSet.getString(6));
-                    cliente.setProfissao(resultSet.getString(7));
-                    cliente.setMorada(resultSet.getString(8));
-                    cliente.setEmail(resultSet.getString(9));
-                    cliente.setNumeroDeBI(resultSet.getString(10));
-                    cliente.setContacto(resultSet.getInt(11));
-                    cliente.setContactoAlternativo(resultSet.getInt(12));
-                    cliente.setNuit(resultSet.getInt(13));
-                    cliente.setGenero(resultSet.getString(14));
-
+                    cliente.setDataDeNascimento(resultSet.getDate(4));
+                    cliente.setEstadoCivil(resultSet.getString(5));
+                    cliente.setProfissao(resultSet.getString(6));
+                    cliente.setMorada(resultSet.getString(7));
+                    cliente.setEmail(resultSet.getString(8));
+                    cliente.setNumeroDeBI(resultSet.getString(9));
+                    cliente.setContacto(resultSet.getInt(10));
+                    cliente.setContactoAlternativo(resultSet.getInt(11));
+                    cliente.setNuit(resultSet.getInt(12));
+                    cliente.setGenero(resultSet.getString(13));
 
                     clientes.add(cliente);
 
                 }
             }
-
-
-
         }catch (SQLException e){
             throw new ExceptionDAO("Erro ao consultar cliente " + e);
         }
-
         return clientes;
     }
 
@@ -177,7 +190,7 @@ public class ClienteDAO {
         Cliente cliente = null;
 
         try {
-            conexao = new ConnectionMVC().getConnection();
+            conexao = new ConnectionLocal().getConnection();
             preparedStatement = conexao.prepareStatement(sql);
 
             preparedStatement.setString(1, email);
@@ -190,17 +203,16 @@ public class ClienteDAO {
                 cliente.setCodigoDeCliente(resultSet.getInt(1));
                 cliente.setNome(resultSet.getString(2));
                 cliente.setApelido(resultSet.getString(3));
-                cliente.setPalavraPasse(resultSet.getString(4));
-                cliente.setDataDeNascimento(resultSet.getDate(5));
-                cliente.setEstadoCivil(resultSet.getString(6));
-                cliente.setProfissao(resultSet.getString(7));
-                cliente.setMorada(resultSet.getString(8));
-                cliente.setEmail(resultSet.getString(9));
-                cliente.setNumeroDeBI(resultSet.getString(10));
-                cliente.setContacto(resultSet.getInt(11));
-                cliente.setContactoAlternativo(resultSet.getInt(12));
-                cliente.setNuit(resultSet.getInt(13));
-                cliente.setGenero(resultSet.getString(14));
+                cliente.setDataDeNascimento(resultSet.getDate(4));
+                cliente.setEstadoCivil(resultSet.getString(5));
+                cliente.setProfissao(resultSet.getString(6));
+                cliente.setMorada(resultSet.getString(7));
+                cliente.setEmail(resultSet.getString(8));
+                cliente.setNumeroDeBI(resultSet.getString(9));
+                cliente.setContacto(resultSet.getInt(10));
+                cliente.setContactoAlternativo(resultSet.getInt(11));
+                cliente.setNuit(resultSet.getInt(12));
+                cliente.setGenero(resultSet.getString(13));
 
             }
 
@@ -232,15 +244,71 @@ public class ClienteDAO {
 
     }
 
+    public Cliente encontrarClientePorID(int id) throws ExceptionDAO{
+        Cliente cliente = null;
+        Connection conexao = null;
+        PreparedStatement preparedStatement = null;
+        String querySQL = "select * from cliente where codigoDoCliente = ?";
+
+
+        try {
+            conexao = new ConnectionLocal().getConnection();
+            preparedStatement = conexao.prepareStatement(querySQL);
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()){
+                cliente = new Cliente();
+                cliente.setCodigoDeCliente(resultSet.getInt(1));
+                cliente.setNome(resultSet.getString(2));
+                cliente.setApelido(resultSet.getString(3));
+                cliente.setDataDeNascimento(resultSet.getDate(4));
+                cliente.setEstadoCivil(resultSet.getString(5));
+                cliente.setProfissao(resultSet.getString(6));
+                cliente.setMorada(resultSet.getString(7));
+                cliente.setEmail(resultSet.getString(8));
+                cliente.setNumeroDeBI(resultSet.getString(9));
+                cliente.setContacto(resultSet.getInt(10));
+                cliente.setContactoAlternativo(resultSet.getInt(11));
+                cliente.setNuit(resultSet.getInt(12));
+                cliente.setGenero(resultSet.getString(13));
+
+            }
+
+
+        } catch (SQLException e){
+        throw new ExceptionDAO("Erro ao consultar funcionário " + e);
+    }finally {
+        try {
+            if(conexao != null)
+                conexao.close();
+
+        }catch (SQLException e){
+            throw new ExceptionDAO("Erro ao fechar a conexão " + e);
+        }
+
+        try {
+            if(preparedStatement != null)
+                preparedStatement.close();
+
+        }catch (SQLException e){
+            throw new ExceptionDAO("Erro ao fechar o statement " + e);
+        }
+    }
+
+        return cliente;
+
+    }
+
     public void alterarCliente(Cliente cliente) throws ExceptionDAO{
         String querySQL = "Update cliente set nome = ?, apelido = ?, dataDeNascimento = ?, estadoCivil = ?, profissao = ?," +
-                " morada = ?, email = ?, numeroDeBI = ?, contacto = ?, contactoAlternativo = ?, nuit = ?, genero = ? where codigoDeCliente = ?";
+                " morada = ?, email = ?, numeroDeBI = ?, contacto = ?, contactoAlternativo = ?, nuit = ?, genero = ? where codigoDoCliente = ?";
 
         PreparedStatement preparedStatement = null;
         Connection conexao = null;
 
         try{
-            conexao = new ConnectionMVC().getConnection();
+            conexao = new ConnectionLocal().getConnection();
             preparedStatement = conexao.prepareStatement(querySQL);
             preparedStatement.setString(1, cliente.getNome());
             preparedStatement.setString(2, cliente.getApelido());

@@ -6,7 +6,7 @@ abstract class Pessoa {
 
     protected String nome;
     protected String apelido;
-    protected String palavraPasse;
+
     protected Date dataDeNascimento;
     protected String estadoCivil;
     protected String profissao;
@@ -51,13 +51,6 @@ abstract class Pessoa {
         this.apelido = apelido;
     }
 
-    public String getPalavraPasse() {
-        return palavraPasse;
-    }
-
-    public void setPalavraPasse(String palavraPasse) {
-        this.palavraPasse = palavraPasse;
-    }
 
     public Date getDataDeNascimento() {
         return dataDeNascimento;
