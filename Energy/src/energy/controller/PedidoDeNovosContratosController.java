@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class PedidoDeNovosContratosController {
 
@@ -25,13 +26,9 @@ public class PedidoDeNovosContratosController {
     public boolean responderPedidoDeNovoContrato(PedidoDeNovosContratos pedidoDeNovosContratos)throws ExceptionDAO{
         if(pedidoDeNovosContratos.isRespondido() == false){
             pedidoDeNovosContratos.setRespondido(true);
-            try {
-                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                Date data = format.parse("08/06/2022");
-                pedidoDeNovosContratos.setDataDaIda(data);
-            }catch (ParseException e){
-                e.printStackTrace();
-            }
+                GregorianCalendar gc=new GregorianCalendar();
+                gc.add(gc.MONTH, 2);//Adicions dois meses a data de ida
+                pedidoDeNovosContratos.setDataDaIda(gc.getTime());
             pedidoDeNovosContratos.responderPedidoDeNovoContrato(pedidoDeNovosContratos);
             return true;
         }
