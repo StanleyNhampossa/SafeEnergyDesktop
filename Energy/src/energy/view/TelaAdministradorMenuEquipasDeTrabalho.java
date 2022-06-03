@@ -1,21 +1,14 @@
 package energy.view;
 
-import energy.controller.ClassificacaoController;
 import energy.controller.EquipasDeTrabalhoController;
-import energy.controller.FuncionarioController;
-import energy.controller.ReclamacaoController;
 import energy.dao.ExceptionDAO;
 import energy.model.*;
 
 import javax.swing.*;
-import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
